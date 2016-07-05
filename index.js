@@ -25,10 +25,6 @@
         };
 
         this._construct();
-
-        if (settings.plugins) {
-            this._plugins(settings.plugins);
-        }
     };
 
     /**
@@ -53,29 +49,6 @@
                     return self._call(method, params);
                 };
             }();
-        }
-    };
-
-    Trakt.prototype._plugins = function(plugins) {
-        if (typeof plugins === 'string') plugins = [plugins];
-        if (typeof plugins !== 'object') return;
-
-        var errors = [];
-        for (var i = 0; i < plugins.length; i++) {
-            var plugin = plugins[i].match('trakt.tv') !== null ? plugins[i] : 'trakt.tv-' + plugins[i];
-            var name = plugin.replace('trakt.tv-', '');
-            try {
-                this[name] = require(plugin);
-                this[name].init(this);
-                this._debug('Trakt.tv ' + name + ' plugin loaded');
-            } catch (e) {
-                this._debug(e);
-                errors.push(name);
-            }
-        }
-
-        if (errors.length > 0) {
-            throw new Error(errors.join() + ': invalid plugin(s)');
         }
     };
 
